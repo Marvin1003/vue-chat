@@ -14,6 +14,13 @@ html {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
 }
+html,
+body {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  overflow: hidden;
+}
 
 *,
 *:before,
