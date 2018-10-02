@@ -1,7 +1,7 @@
 {
   "name": "PixelparkChat",
   "version": "1.0.0",
-  "description": "My lovely Nuxt.js project",
+  "description": "Chat application",
   "author": "Marvin Klaproth",
   "private": true,
   "scripts": {
