@@ -6,7 +6,7 @@
         <span> is typing...</span>
       </ul>
     </div>
-    <ul>
+    <ul ref="list" @touchmove="allowScrolling">
       <li v-for="(message, index) in messages" class="chat-message-output" :key="index" :class="message.name === name ? 'chat-message-output-me' : ''">
         <div v-if="!message.class" class="chat-default">
           <div class="chat-message-output-info"><span class="chat-message-output-name">{{ message.name }}</span><time>{{ message.time }}</time></div>
@@ -40,6 +40,11 @@ export default {
       isTyping: []
     }
   },
+  methods: {
+    allowScrolling(e) {
+      e.stopPropagation()
+    }
+  },
   async mounted() {
     socket = await import('plugins/socketio').then(mod => mod.default)
 
@@ -56,7 +61,7 @@ export default {
     })
 
     socket.on('joined', ({ user, type }) => {
-      if (user !== this.name) {
+      if (user !== this.name && user) {
         this.messages.push({
           text: user,
           class: 'chat-joined_disconnected',
@@ -66,10 +71,11 @@ export default {
     })
   },
   updated() {
-    const scrollHeight = this.$el.scrollHeight
-    const containerHeight = this.$el.clientHeight
+    const scrollHeight = this.$refs.list.scrollHeight
+    const containerHeight = this.$refs.list.clientHeight
+
     if (scrollHeight > containerHeight)
-      this.$el.scrollTop = scrollHeight - containerHeight
+      this.$refs.list.scrollTop = scrollHeight - containerHeight
   }
 }
 </script>
@@ -97,7 +103,7 @@ export default {
     display: flex;
     color: #757575;
     font-size: 12px;
-    height: 20px;
+    min-height: 20px;
     ul {
       max-width: 50%;
       overflow: scroll;
@@ -113,6 +119,8 @@ export default {
     }
   }
   > ul {
+    overflow: scroll;
+    flex-grow: 1;
     flex-direction: column;
     .chat-message-output {
       margin: 7.5px 5px;
@@ -141,7 +149,7 @@ export default {
             color: #fafafa;
           }
           .chat-message-output-name {
-            color: #3f51b5;
+            color: #1a237e;
           }
         }
       }
