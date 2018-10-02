@@ -88,7 +88,7 @@ export default {
       padding: 0 20px;
       cursor: pointer;
       color: #2196f3;
-      font-size: 14px;
+      font-size: 16px;
       transition: color 0.25s ease-out;
       font-family: inherit;
       &:hover {
