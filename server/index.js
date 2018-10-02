@@ -39,12 +39,14 @@ io.on('connection', socket => {
 
   // User joined
   socket.on('joined', user => {
-    user && userList.push({ name: user, id: socket.id })
-    io.emit('joined', {
-      user,
-      userList,
-      type: 'joined'
-    })
+    if(user) {
+      userList.push({ name: user, id: socket.id })
+      io.emit('joined', {
+        user,
+        userList,
+        type: 'joined'
+      })
+    }
   })
 
   // User is typing
@@ -64,6 +66,6 @@ io.on('connection', socket => {
       return true
     })
 
-    io.emit('joined', { user: removedUser, userList, type: 'disconnected' })
+    removedUser && io.emit('joined', { user: removedUser, userList, type: 'disconnected' })
   })
 })
