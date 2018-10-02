@@ -130,6 +130,7 @@ export default {
         padding: 15px;
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
         max-width: 250px;
+        background-color: #fafafa;
       }
       .chat-joined_disconnected {
         text-align: center;
@@ -168,7 +169,7 @@ export default {
         margin-right: 10px;
       }
       time {
-        color: #757575;
+        color: #616161;
       }
       p {
         word-break: break-word;
