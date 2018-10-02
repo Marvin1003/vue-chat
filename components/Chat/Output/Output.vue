@@ -1,5 +1,11 @@
 <template>
   <div :class="className">
+    <div class="chat-is-typing">
+      <ul v-show="isTyping.length > 0">
+        <li v-for="(user, index) in isTyping" :key="index">{{ user }}</li>
+        <span> is typing...</span>
+      </ul>
+    </div>
     <ul>
       <li v-for="(message, index) in messages" class="chat-message-output" :key="index" :class="message.name === name ? 'chat-message-output-me' : ''">
         <div v-if="!message.class" class="chat-default">
@@ -30,22 +36,33 @@ export default {
   },
   data() {
     return {
-      messages: []
+      messages: [],
+      isTyping: []
     }
   },
   async mounted() {
     socket = await import('plugins/socketio').then(mod => mod.default)
 
+    socket.on('isTyping', user => {
+      if (user.name !== this.name) {
+        if (user.isTyping && !this.isTyping.includes(user.name))
+          this.isTyping.push(user.name)
+        else if (!user.isTyping)
+          this.isTyping = this.isTyping.filter(name => name !== user.name)
+      }
+    })
     socket.on('message', ({ msg, name, time }) => {
       this.messages.push({ text: msg, name, time })
     })
 
     socket.on('joined', ({ user, type }) => {
-      this.messages.push({
-        text: user,
-        class: 'chat-joined_disconnected',
-        type
-      })
+      if (user !== this.name) {
+        this.messages.push({
+          text: user,
+          class: 'chat-joined_disconnected',
+          type
+        })
+      }
     })
   },
   updated() {
@@ -61,6 +78,8 @@ export default {
 .chat-output {
   overflow: scroll;
   margin: 0 70px;
+  display: flex;
+  flex-direction: column;
   @media screen and(max-width: 768px) {
     margin: 0 25px;
   }
@@ -69,9 +88,31 @@ export default {
     margin: 0 10px;
   }
   ul {
+    display: flex;
     padding: 0;
     list-style-type: none;
+  }
+
+  .chat-is-typing {
     display: flex;
+    color: #757575;
+    font-size: 12px;
+    height: 20px;
+    ul {
+      max-width: 50%;
+      overflow: scroll;
+
+      span {
+        white-space: pre;
+      }
+
+      li:not(:last-of-type)::after {
+        content: ', ';
+        white-space: pre;
+      }
+    }
+  }
+  > ul {
     flex-direction: column;
     .chat-message-output {
       margin: 7.5px 5px;

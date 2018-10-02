@@ -1,7 +1,7 @@
 <template>
   <div :class="className">
     <form @submit="sendMessage">
-      <input type="text" rows="1" class="chat-message" placeholder="Your message" v-model="message" />
+      <input type="text" rows="1" class="chat-message" placeholder="Type a message..." v-model="message" @input="isTyping" />
       <button type="submit">send</button>
     </form>
   </div>
@@ -26,10 +26,24 @@ export default {
   },
   data() {
     return {
-      message: null
+      message: null,
+      timeout: null,
+      isTypingDuration: 9750,
+      isTypingEmit: true
     }
   },
   methods: {
+    isTyping() {
+      clearTimeout(this.timeout)
+      if (this.isTypingEmit) {
+        this.isTypingEmit = false
+        socket.emit('isTyping', { name: this.name, isTyping: true })
+      }
+      this.timeout = setTimeout(() => {
+        this.isTypingEmit = true
+        socket.emit('isTyping', { name: this.name, isTyping: false })
+      }, this.isTypingDuration)
+    },
     sendMessage(e) {
       e && e.preventDefault()
       if (this.message) {
@@ -49,7 +63,7 @@ export default {
 .chat-message-container {
   padding: 20px 0;
   margin: 0 75px;
-   @media screen and(max-width: 768px) {
+  @media screen and(max-width: 768px) {
     margin: 0 30px;
   }
   @media screen and(max-width: 400px) {

@@ -31,10 +31,13 @@ console.log('Server listening on localhost:' + PORT)
 // SOCKET IO
 let userList = []
 io.on('connection', socket => {
+  // Validate user name
   socket.on('validate', name => {
     if (userList.includes(name)) io.emit('validate', false)
     else io.emit('validate', true)
   })
+
+  // User joined
   socket.on('joined', user => {
     user && userList.push({ name: user, id: socket.id })
     io.emit('joined', {
@@ -43,6 +46,11 @@ io.on('connection', socket => {
       type: 'joined'
     })
   })
+
+  // User is typing
+  socket.on('isTyping', user => io.emit('isTyping', user))
+  
+  // Messages
   socket.on('message', msg => io.emit('message', msg))
 
   socket.on('disconnect', () => {
