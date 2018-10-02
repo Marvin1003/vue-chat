@@ -64,7 +64,6 @@ export default {
       margin-top: 20px;
       height: 33px;
       padding: 0 20px;
-      text-transform: uppercase;
       min-width: auto !important;
 
       border-radius: 4px;
@@ -94,6 +93,7 @@ export default {
     input {
       padding: 10px;
       min-width: 200px;
+      font-size: 14px;
     }
     button {
       cursor: pointer;
@@ -103,6 +103,7 @@ export default {
       min-width: 60px;
       font-family: inherit;
       transition: color 0.25s ease-out;
+      text-transform: uppercase;
       &:hover {
         color: #1976d2;
       }
