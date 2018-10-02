@@ -48,7 +48,7 @@ export default {
   overflow: hidden;
   width: 80%;
   height: 70%;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  box-shadow: 0 23px 36px rgba(0,0,0,.16), 0 4px 14px rgba(0,0,0,.23);
   position: relative;
   display: grid;
   grid-template-rows: 120px repeat(2, 1fr) auto;
