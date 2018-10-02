@@ -1,0 +1,42 @@
+<template>
+  <div :class="className">
+    <h2>Chat</h2>
+    <h2>{{ name }}</h2>
+  </div>
+</template>
+<script>
+export default {
+  props: {
+    className: {
+      type: String,
+      default: 'chat-panel-top'
+    },
+    name: {
+      type: String,
+      required: true
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.chat-panel-top {
+  display: flex;
+  align-items: flex-end;
+  margin: 0 75px;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  @media screen and(max-width: 768px) {
+    margin: 0 30px;
+    padding-bottom: 0;
+    align-items: center;
+  }
+
+  @media screen and(max-width: 400px) {
+    margin: 0 15px;
+  }
+  h2 {
+    font-weight: normal;
+  }
+}
+</style>

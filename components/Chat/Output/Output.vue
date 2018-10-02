@@ -1,0 +1,130 @@
+<template>
+  <div :class="className">
+    <ul>
+      <li v-for="(message, index) in messages" class="chat-message-output" :key="index" :class="message.name === name ? 'chat-message-output-me' : ''">
+        <div v-if="!message.class" class="chat-default">
+          <div class="chat-message-output-info"><span class="chat-message-output-name">{{ message.name }}</span><time>{{ message.time }}</time></div>
+          <p>{{ message.text }}</p>
+        </div>
+        <div v-else :class="message.class">
+          {{ message.text }} {{ message.type }}
+        </div>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+var socket = null
+
+export default {
+  props: {
+    className: {
+      type: String,
+      default: 'chat-output'
+    },
+    name: {
+      type: String,
+      required: true
+    }
+  },
+  data() {
+    return {
+      messages: []
+    }
+  },
+  async mounted() {
+    socket = await import('plugins/socketio').then(mod => mod.default)
+
+    socket.on('message', ({ msg, name, time }) => {
+      this.messages.push({ text: msg, name, time })
+    })
+
+    socket.on('joined', ({ user, type }) => {
+      this.messages.push({
+        text: user,
+        class: 'chat-joined_disconnected',
+        type
+      })
+    })
+  },
+  updated() {
+    const scrollHeight = this.$el.scrollHeight
+    const containerHeight = this.$el.clientHeight
+    if (scrollHeight > containerHeight)
+      this.$el.scrollTop = scrollHeight - containerHeight
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.chat-output {
+  overflow: scroll;
+  margin: 0 70px;
+  @media screen and(max-width: 768px) {
+    margin: 0 25px;
+  }
+
+  @media screen and(max-width: 400px) {
+    margin: 0 10px;
+  }
+  ul {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    .chat-message-output {
+      margin: 7.5px 5px;
+      .chat-default {
+        border-radius: 4px;
+        overflow: hidden;
+        padding: 15px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        max-width: 250px;
+      }
+      .chat-joined_disconnected {
+        text-align: center;
+        color: #757575;
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+        font-style: italic;
+      }
+
+      &.chat-message-output-me {
+        align-self: flex-end;
+        color: #fafafa;
+        .chat-default {
+          background-color: #2196f3;
+          time {
+            color: #fafafa;
+          }
+          .chat-message-output-name {
+            color: #3f51b5;
+          }
+        }
+      }
+      .chat-message-output-info {
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+        font-size: 10px;
+      }
+
+      .chat-message-output-name {
+        display: inline-block;
+        color: #f44336;
+        margin-right: 10px;
+      }
+      time {
+        color: #757575;
+      }
+      p {
+        word-break: break-word;
+      }
+    }
+  }
+}
+</style>
