@@ -33,13 +33,13 @@ let userList = []
 io.on('connection', socket => {
   // Validate user name
   socket.on('validate', name => {
-    if (userList.includes(name)) io.emit('validate', false)
-    else io.emit('validate', true)
+    const exists = userList.some(user => user.name === name)
+    exists ? io.emit('validate', false) : io.emit('validate', true)
   })
 
   // User joined
   socket.on('joined', user => {
-    if(user) {
+    if (user) {
       userList.push({ name: user, id: socket.id })
       io.emit('joined', {
         user,
@@ -51,7 +51,7 @@ io.on('connection', socket => {
 
   // User is typing
   socket.on('isTyping', user => io.emit('isTyping', user))
-  
+
   // Messages
   socket.on('message', msg => io.emit('message', msg))
 
@@ -66,6 +66,7 @@ io.on('connection', socket => {
       return true
     })
 
-    removedUser && io.emit('joined', { user: removedUser, userList, type: 'disconnected' })
+    removedUser &&
+      io.emit('joined', { user: removedUser, userList, type: 'disconnected' })
   })
 })
