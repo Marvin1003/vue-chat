@@ -6,7 +6,7 @@
         <span> is typing...</span>
       </ul>
     </div>
-    <ul ref="list" @touchmove="allowScrolling">
+    <ul ref="list">
       <li v-for="(message, index) in messages" class="chat-message-output" :key="index" :class="message.name === name ? 'chat-message-output-me' : ''">
         <div v-if="!message.class" class="chat-default">
           <div class="chat-message-output-info"><span class="chat-message-output-name">{{ message.name }}</span><time>{{ message.time }}</time></div>
@@ -40,11 +40,6 @@ export default {
       isTyping: []
     }
   },
-  methods: {
-    allowScrolling(e) {
-      e.stopPropagation()
-    }
-  },
   async mounted() {
     socket = await import('plugins/socketio').then(mod => mod.default)
 
@@ -56,6 +51,7 @@ export default {
           this.isTyping = this.isTyping.filter(name => name !== user.name)
       }
     })
+    
     socket.on('message', ({ msg, name, time }) => {
       this.messages.push({ text: msg, name, time })
     })

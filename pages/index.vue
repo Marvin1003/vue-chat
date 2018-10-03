@@ -18,20 +18,7 @@ export default {
     toggle(name) {
       this.name = name
       this.showChat = true
-    },
-    preventDefault(e) {
-      e.preventDefault()
     }
-  },
-  mounted() {
-    window.addEventListener('touchmove', this.preventDefault, {
-      passive: false
-    })
-  },
-  destroyed() {
-    window.removeEventListener('touchmove', this.preventDefault, {
-      passive: false
-    })
   },
   data() {
     return {
