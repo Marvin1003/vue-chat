@@ -28,6 +28,11 @@ export default {
       passive: false
     })
   },
+  destroyed() {
+    window.removeEventListener('touchmove', this.preventDefault, {
+      passive: false
+    })
+  },
   data() {
     return {
       showChat: false,

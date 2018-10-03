@@ -6,7 +6,7 @@
         <span> is typing...</span>
       </ul>
     </div>
-    <ul ref="list">
+    <ul ref="list" @touchmove="allowScrolling">
       <li v-for="(message, index) in messages" class="chat-message-output" :key="index" :class="message.name === name ? 'chat-message-output-me' : ''">
         <div v-if="!message.class" class="chat-default">
           <div class="chat-message-output-info"><span class="chat-message-output-name">{{ message.name }}</span><time>{{ message.time }}</time></div>
@@ -38,6 +38,11 @@ export default {
     return {
       messages: [],
       isTyping: []
+    }
+  },
+  methods: {
+    allowScrolling(e) {
+      e.stopPropagation()
     }
   },
   async mounted() {
@@ -77,7 +82,8 @@ export default {
 
 <style lang="scss" scoped>
 .chat-output {
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   margin: 0 70px;
   display: flex;
   flex-direction: column;
