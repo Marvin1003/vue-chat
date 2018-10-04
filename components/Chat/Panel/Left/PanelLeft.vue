@@ -1,10 +1,12 @@
 <template>
   <div :class="className">
-    <ul>
-      <li v-for="room in roomList" :key="room" @click="changeRoom($event, room)">
-        {{ room }}
-      </li>
-    </ul>
+    <div>
+      <ul>
+        <li v-for="room in rooms.list" :key="room" @click="$emit('switchRoom', room)">
+          {{ room }}
+        </li>
+      </ul>
+    </div>
     <ul>
       <li v-for="user in userList" :key="user.id">
         {{user.name }}
@@ -23,25 +25,16 @@ export default {
     className: {
       type: String,
       default: 'chat-panel-left'
-    }
+    },
+    rooms: {
+      type: Object,
+      required: true
+    },
   },
   data() {
     return {
       userList: [],
-      roomList: ['General', 'Developer'],
-      currRoom: 'General'
-    }
-  },
-  methods: {
-    changeRoom(e, room) {
-      if (room !== this.currRoom) {
-        socket.emit('switch room', {
-          prevRoom: this.currRoom,
-          nextRoom: room,
-          name: this.name
-        })
-        this.currRoom = room
-      }
+      currRoom: ''
     }
   },
   async mounted() {
@@ -64,17 +57,6 @@ export default {
   @media screen and(max-width: 400px) {
     margin-left: 15px;
   }
-  // background: #00b09b; /* fallback for old browsers */
-  // background: -webkit-linear-gradient(
-  //   to top,
-  //   #96c93d,
-  //   #00b09b
-  // ); /* Chrome 10-25, Safari 5.1-6 */
-  // background: linear-gradient(
-  //   to top,
-  //   #96c93d,
-  //   #00b09b
-  // ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
   display: flex;
   flex-direction: column;
@@ -91,8 +73,11 @@ export default {
     overflow: scroll;
     list-style-type: none;
     li {
-      background-color: white;
-      border-radius: 2px;
+      cursor: pointer;
+      max-width: 300px;
+      background-color: #2196f3;
+      color: white;
+      border-radius: 100px;
       display: flex;
       align-items: center;
       padding-left: 30px;

@@ -6,6 +6,7 @@ module.exports = {
   /*
   ** Headers of the page
   */
+
   head: {
     title: pkg.name,
     meta: [
@@ -34,12 +35,25 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [],
+  // css: {
+  //   loaderOptions: {
+  //     sass: {
+  //       data: '@import "styles/_vars.scss";'
+  //     }
+  //   }
+  // },
 
   /*
   ** Plugins to load before mounting the App
   */
   // plugins: ['~/plugins/socketio'],
+
+  // pluginOptions: {
+  //   'style-resources-loader': {
+  //     preProcessor: 'scss',
+  //     patterns: [path.resolve(__dirname, 'styles/_vars.scss')]
+  //   }
+  // },
 
   /*
   ** Nuxt.js modules
@@ -66,8 +80,8 @@ module.exports = {
     */
     extend(config, ctx) {
       config.resolve.alias.components = path.resolve(__dirname, 'components')
-      config.resolve.alias.plugins = path.resolve(__dirname, 'plugins');
-      config.resolve.alias.assets = path.resolve(__dirname, 'assets');
+      config.resolve.alias.plugins = path.resolve(__dirname, 'plugins')
+      config.resolve.alias.assets = path.resolve(__dirname, 'assets')
 
       return config
     }

@@ -1,7 +1,7 @@
 <template>
   <div :class="className">
-    <h2>Chat</h2>
-    <h2>{{ name }}</h2>
+    <h2 @click="$emit('toggleRooms')" class="chat-rooms-text">Rooms</h2>
+    <h2>{{ room }}</h2>
   </div>
 </template>
 <script>
@@ -12,6 +12,10 @@ export default {
       default: 'chat-panel-top'
     },
     name: {
+      type: String,
+      required: true
+    },
+    room: {
       type: String,
       required: true
     }
@@ -37,6 +41,9 @@ export default {
   }
   h2 {
     font-weight: normal;
+  }
+  .chat-rooms-text {
+    cursor: pointer;
   }
 }
 </style>

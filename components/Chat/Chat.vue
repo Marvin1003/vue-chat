@@ -1,10 +1,10 @@
 <template>
   <div class="chat">
-    <panel-top className="chat-panel-top" :name="name" />
-    <panel-left className="chat-panel-left" :name="name" />
+    <panel-top className="chat-panel-top" :name="name" :room="rooms.current" @toggleRooms="toggleRooms" />
+    <panel-left className="chat-panel-left" @switchRoom="switchRoom" :name="name" :rooms="rooms" />
     <!-- <panel-right className="chat-panel-right" :name="name" /> -->
-    <Output className="chat-output" :name="name" />
-    <Input className="chat-message-container" :name="name" />
+    <Output className="chat-output" :name="name" :room="rooms.current" />
+    <Input className="chat-message-container" :name="name" :room="rooms.current" />
     </div>
 </template>
 
@@ -24,9 +24,36 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      rooms: {
+        list: ['General', 'Work', 'Developer', 'NSFW'],
+        current: 'General'
+      }
+    }
+  },
+  methods: {
+    switchRoom(room) {
+      if (room !== this.rooms.current) {
+        socket.emit('switch room', {
+          prevRoom: this.currRoom,
+          nextRoom: room,
+          name: this.name
+        })
+
+        this.rooms.current = room
+      }
+      if (this.$el.classList.contains('chat-rooms-toggle'))
+        this.$el.classList.remove('chat-rooms-toggle')
+    },
+    toggleRooms() {
+      if (window.innerWidth <= 992)
+        this.$el.classList.toggle('chat-rooms-toggle')
+    }
+  },
   async mounted() {
     socket = await import('plugins/socketio').then(mod => mod.default)
-    socket.emit('joined', this.name)
+    socket.emit('joined', { name: this.name, room: this.rooms.current })
   },
   components: {
     Output,
@@ -38,11 +65,11 @@ export default {
 }
 </script>
 
+
 <style lang="scss" scoped>
 .chat {
   background-color: rgba(245, 245, 245, 0.9);
   color: #212121;
-  display: flex;
   border-radius: 4px;
   overflow: hidden;
   width: 80%;
@@ -58,7 +85,7 @@ export default {
     'left output output output'
     'left input input input';
 
-  @media screen and(max-width: 768px) {
+  @media screen and(max-width: 992px) {
     grid-template-areas:
       'top top top top'
       'output output output output'
@@ -101,6 +128,26 @@ export default {
 
   .chat-message-container {
     grid-area: input;
+  }
+}
+</style>
+
+<style lang="scss">
+.chat-rooms-toggle {
+  .chat-panel-left {
+    grid-column: 1 / 5 !important;
+    grid-row: 2 / 5 !important;
+    display: block !important;
+    margin: 0 15px !important;
+    li {
+      margin: 10px auto !important;
+    }
+  }
+  .chat-output {
+    display: none;
+  }
+  .chat-message-container {
+    display: none;
   }
 }
 </style>

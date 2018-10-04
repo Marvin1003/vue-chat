@@ -19,6 +19,10 @@ export default {
     name: {
       type: String,
       required: true
+    },
+    room: {
+      type: String,
+      required: true
     }
   },
   async mounted() {
@@ -51,7 +55,12 @@ export default {
         const minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
         const time = `${date.getHours()}:${minutes}`
 
-        socket.emit('message', { name: this.name, msg: this.message, time })
+        socket.emit('message', {
+          name: this.name,
+          msg: this.message,
+          time,
+          room: this.room
+        })
         this.message = null
       }
     }

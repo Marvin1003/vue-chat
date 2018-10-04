@@ -30,9 +30,8 @@ console.log('Server listening on localhost:' + PORT)
 
 // SOCKET IO
 let userList = []
-const defaultRoom = 'General'
+
 io.on('connection', socket => {
-  socket.join(defaultRoom)
   socket.on('switch room', ({ prevRoom, nextRoom, name }) => {
     socket.leave(prevRoom)
     socket.join(nextRoom)
@@ -44,11 +43,13 @@ io.on('connection', socket => {
   })
 
   // User joined
-  socket.on('joined', user => {
-    if (user) {
-      userList.push({ name: user, id: socket.id })
+  socket.on('joined', ({ name, room }) => {
+    if (name && room) {
+      socket.join(room)
+
+      userList.push({ name: name, id: socket.id })
       io.emit('roomChange', {
-        user,
+        name,
         userList,
         type: 'JOINED'
       })
@@ -59,7 +60,7 @@ io.on('connection', socket => {
   socket.on('isTyping', user => io.emit('isTyping', user))
 
   // Messages
-  socket.on('message', msg => io.to("General").emit('message', msg))
+  socket.on('message', msg => io.to(msg.room).emit('message', msg))
 
   socket.on('disconnect', () => {
     let removedUser = null

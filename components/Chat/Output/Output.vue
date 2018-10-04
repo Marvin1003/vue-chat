@@ -6,8 +6,8 @@
         <span> is typing...</span>
       </ul>
     </div>
-    <ul ref="list" @touchstart="isTouching = true" @touchend="isTouching = false">
-      <li v-for="(message, index) in messages" class="chat-message-output" :key="index" :class="message.name === name ? 'chat-message-output-me' : ''">
+    <ul v-show="messages[this.room]" ref="list" @touchstart="isTouching = true" @touchend="isTouching = false">
+      <li v-for="(message, index) in messages[this.room]" class="chat-message-output" :key="index" :class="message.name === name ? 'chat-message-output-me' : ''">
         <div v-if="!message.class" class="chat-default">
           <div class="chat-message-output-info"><span class="chat-message-output-name">{{ message.name }}</span><time>{{ message.time }}</time></div>
           <p>{{ message.text }}</p>
@@ -32,11 +32,15 @@ export default {
     name: {
       type: String,
       required: true
+    },
+    room: {
+      type: String,
+      required: true
     }
   },
   data() {
     return {
-      messages: [],
+      messages: {},
       isTyping: [],
       isTouching: false,
       threshold: 100,
@@ -56,12 +60,14 @@ export default {
     })
 
     socket.on('message', ({ msg, name, time }) => {
-      this.messages.push({ text: msg, name, time })
+      if (!this.messages[this.room]) this.$set(this.messages, this.room, [])
+      this.messages[this.room].push({ text: msg, name, time })
     })
 
     socket.on('roomChange', ({ user, type }) => {
       if (user !== this.name && user) {
-        this.messages.push({
+        if (!this.messages[this.room]) this.messages[this.room] = []
+        this.messages[this.room].push({
           text: user,
           class: 'chat-joined_disconnected',
           type: type.toLowerCase()
@@ -109,13 +115,14 @@ export default {
   }
 
   .chat-is-typing {
+    min-height: 30px;
     display: flex;
     color: #757575;
     font-size: 12px;
-    min-height: 30px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    margin-left: 5px;
+    margin: 0 5px;
     ul {
       max-width: 50%;
       overflow: scroll;
