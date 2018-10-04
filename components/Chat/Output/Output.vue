@@ -6,7 +6,7 @@
         <span> is typing...</span>
       </ul>
     </div>
-    <ul ref="list">
+    <ul ref="list" @touchstart="isTouching = true" @touchend="isTouching = false">
       <li v-for="(message, index) in messages" class="chat-message-output" :key="index" :class="message.name === name ? 'chat-message-output-me' : ''">
         <div v-if="!message.class" class="chat-default">
           <div class="chat-message-output-info"><span class="chat-message-output-name">{{ message.name }}</span><time>{{ message.time }}</time></div>
@@ -37,7 +37,10 @@ export default {
   data() {
     return {
       messages: [],
-      isTyping: []
+      isTyping: [],
+      isTouching: false,
+      threshold: 100,
+      prevScrollHeight: 0
     }
   },
   async mounted() {
@@ -51,7 +54,7 @@ export default {
           this.isTyping = this.isTyping.filter(name => name !== user.name)
       }
     })
-    
+
     socket.on('message', ({ msg, name, time }) => {
       this.messages.push({ text: msg, name, time })
     })
@@ -69,9 +72,18 @@ export default {
   updated() {
     const scrollHeight = this.$refs.list.scrollHeight
     const containerHeight = this.$refs.list.clientHeight
+    const currY = this.$refs.list.scrollTop
 
-    if (scrollHeight > containerHeight)
+    const bottom = this.prevScrollHeight - containerHeight
+
+    if (
+      !this.isTouching &&
+      scrollHeight > containerHeight &&
+      currY > bottom - this.threshold
+    )
       this.$refs.list.scrollTop = scrollHeight - containerHeight
+
+    this.prevScrollHeight = scrollHeight
   }
 }
 </script>
