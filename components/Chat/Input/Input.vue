@@ -46,7 +46,7 @@ export default {
     },
     sendMessage(e) {
       e && e.preventDefault()
-      if (this.message) {
+      if (this.message && this.message.trim()) {
         const date = new Date()
         const minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
         const time = `${date.getHours()}:${minutes}`
