@@ -36,7 +36,7 @@ export default {
     switchRoom(room) {
       if (room !== this.rooms.current) {
         socket.emit('switch room', {
-          prevRoom: this.currRoom,
+          prevRoom: this.rooms.current,
           nextRoom: room,
           name: this.name
         })

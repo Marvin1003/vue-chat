@@ -43,7 +43,7 @@ export default {
       messages: {},
       isTyping: [],
       isTouching: false,
-      threshold: 100,
+      threshold: 150,
       prevScrollHeight: 0
     }
   },
@@ -79,7 +79,6 @@ export default {
     const scrollHeight = this.$refs.list.scrollHeight
     const containerHeight = this.$refs.list.clientHeight
     const currY = this.$refs.list.scrollTop
-
     const bottom = this.prevScrollHeight - containerHeight
 
     if (
