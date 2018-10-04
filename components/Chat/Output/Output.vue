@@ -59,12 +59,12 @@ export default {
       this.messages.push({ text: msg, name, time })
     })
 
-    socket.on('joined', ({ user, type }) => {
+    socket.on('roomChange', ({ user, type }) => {
       if (user !== this.name && user) {
         this.messages.push({
           text: user,
           class: 'chat-joined_disconnected',
-          type
+          type: type.toLowerCase()
         })
       }
     })

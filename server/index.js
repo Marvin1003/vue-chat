@@ -30,7 +30,13 @@ console.log('Server listening on localhost:' + PORT)
 
 // SOCKET IO
 let userList = []
+const defaultRoom = 'General'
 io.on('connection', socket => {
+  socket.join(defaultRoom)
+  socket.on('switch room', ({ prevRoom, nextRoom, name }) => {
+    socket.leave(prevRoom)
+    socket.join(nextRoom)
+  })
   // Validate user name
   socket.on('validate', name => {
     const exists = userList.some(user => user.name === name)
@@ -41,10 +47,10 @@ io.on('connection', socket => {
   socket.on('joined', user => {
     if (user) {
       userList.push({ name: user, id: socket.id })
-      io.emit('joined', {
+      io.emit('roomChange', {
         user,
         userList,
-        type: 'joined'
+        type: 'JOINED'
       })
     }
   })
@@ -53,7 +59,7 @@ io.on('connection', socket => {
   socket.on('isTyping', user => io.emit('isTyping', user))
 
   // Messages
-  socket.on('message', msg => io.emit('message', msg))
+  socket.on('message', msg => io.to("General").emit('message', msg))
 
   socket.on('disconnect', () => {
     let removedUser = null
@@ -67,6 +73,10 @@ io.on('connection', socket => {
     })
 
     removedUser &&
-      io.emit('joined', { user: removedUser, userList, type: 'disconnected' })
+      io.emit('roomChange', {
+        user: removedUser,
+        userList,
+        type: 'DISCONNECTED'
+      })
   })
 })

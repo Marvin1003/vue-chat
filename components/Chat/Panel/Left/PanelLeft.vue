@@ -1,6 +1,11 @@
 <template>
   <div :class="className">
     <ul>
+      <li v-for="room in roomList" :key="room" @click="changeRoom($event, room)">
+        {{ room }}
+      </li>
+    </ul>
+    <ul>
       <li v-for="user in userList" :key="user.id">
         {{user.name }}
       </li>
@@ -22,7 +27,21 @@ export default {
   },
   data() {
     return {
-      userList: []
+      userList: [],
+      roomList: ['General', 'Developer'],
+      currRoom: 'General'
+    }
+  },
+  methods: {
+    changeRoom(e, room) {
+      if (room !== this.currRoom) {
+        socket.emit('switch room', {
+          prevRoom: this.currRoom,
+          nextRoom: room,
+          name: this.name
+        })
+        this.currRoom = room
+      }
     }
   },
   async mounted() {
