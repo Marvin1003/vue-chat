@@ -42,11 +42,11 @@ module.exports = {
   //     }
   //   }
   // },
-
+  // css: ['~assets/styles/_vars.scss'],
   /*
   ** Plugins to load before mounting the App
   */
-  // plugins: ['~/plugins/socketio'],
+  plugins: ['~/plugins/gsap'],
 
   // pluginOptions: {
   //   'style-resources-loader': {
@@ -61,7 +61,12 @@ module.exports = {
 
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    [
+      'nuxt-sass-resources-loader',
+      // These styles get imported in every css without having to explicity @import("variables.scss") them. Useful for variables - mixins
+      path.resolve(__dirname, 'assets/styles/_vars.scss')
+    ]
   ],
 
   /*
