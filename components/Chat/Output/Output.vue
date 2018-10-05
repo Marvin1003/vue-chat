@@ -95,37 +95,25 @@ export default {
 
 <style lang="scss" scoped>
 .chat-output {
+  display: flex;
+  flex-direction: column;
   overflow-y: scroll;
   overflow-x: hidden;
   margin: 0 70px;
-  display: flex;
-  flex-direction: column;
-  @media screen and(max-width: 768px) {
-    margin: 0 25px;
-  }
-
-  @media screen and(max-width: 400px) {
-    margin: 0 10px;
-  }
   ul {
     display: flex;
-    padding: 0;
-    list-style-type: none;
   }
-
   .chat-is-typing {
-    min-height: 30px;
-    display: flex;
-    color: #757575;
-    font-size: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-height: 30px;
     margin: 0 5px;
+    color: $color_gray--dark;
+    font-size: 12px;
     ul {
       max-width: 50%;
       overflow: scroll;
-
       span {
         white-space: pre;
       }
@@ -137,43 +125,42 @@ export default {
     }
   }
   > ul {
-    overflow: scroll;
-    flex-grow: 1;
     flex-direction: column;
+    flex-grow: 1;
+    overflow: scroll;
     .chat-message-output {
       margin: 7.5px 5px;
       .chat-default {
+        max-width: 250px;
+        padding: 15px;
         border-radius: 4px;
         overflow: hidden;
-        padding: 15px;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-        max-width: 250px;
-        background-color: #fafafa;
+        background-color: $color_typography--white;
+        box-shadow: $box-shadow--light;
       }
       .chat-joined_disconnected {
-        text-align: center;
-        color: #757575;
-        border-radius: 0;
         padding: 0;
-        box-shadow: none;
+        border-radius: 0;
+        color: $color_gray--dark;
         font-style: italic;
+        text-align: center;
+        box-shadow: none;
       }
 
       &.chat-message-output-me {
         align-self: flex-end;
-        color: #fafafa;
+        color: $color_typography--white;
         .chat-default {
-          background-color: #2196f3;
+          background-color: $color_blue--default;
           time {
-            color: #fafafa;
+            color: $color_gray--light;
           }
           .chat-message-output-name {
-            color: #1a237e;
+            color: $color_blue--hover;
           }
         }
       }
       .chat-message-output-info {
-        font-size: 12px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -183,16 +170,23 @@ export default {
 
       .chat-message-output-name {
         display: inline-block;
-        color: #f44336;
         margin-right: 10px;
+        color: $color_red--default;
       }
       time {
-        color: #616161;
+        color: $color_gray--dark;
       }
       p {
         word-break: break-word;
       }
     }
+  }
+  @media screen and(max-width: 768px) {
+    margin: 0 25px;
+  }
+
+  @media screen and(max-width: 400px) {
+    margin: 0 10px;
   }
 }
 </style>

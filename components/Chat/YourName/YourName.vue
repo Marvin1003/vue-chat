@@ -42,34 +42,15 @@ export default {
 
 <style lang="scss" scoped>
 .chat-your-name-container {
-  background-color: rgba(245, 245, 245, 0.9);
-  padding: 30px 50px;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  @media screen and(max-width: 400px) {
-    form {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    button {
-      align-self: center;
-      background-color: #2196f3;
-      color: white !important;
-      margin-top: 20px;
-      height: 33px;
-      padding: 0 20px;
-      min-width: auto !important;
-
-      border-radius: 4px;
-    }
-  }
+  
+  padding: 30px 50px;
+  background-color: $color_background--primary-opacity;
+  border-radius: $border-radius--primary;
+  box-shadow: $box-shadow--primary;
+  overflow: hidden;
 
   h2 {
     text-align: center;
@@ -78,36 +59,48 @@ export default {
   }
 
   .chat-error-name-used {
-    color: #f44336;
+    color: $color_red--default;
     text-align: center;
     margin-top: 20px;
   }
   form {
-    border-radius: 4px;
-    overflow: hidden;
     display: flex;
-    input,
-    button {
-      outline: 0;
-      border: 0;
-    }
+    overflow: hidden;
+    border-radius: inherit;
     input {
       padding: 10px;
       min-width: 200px;
       font-size: 14px;
     }
     button {
-      cursor: pointer;
-      border-left: 1px #e0e0e0;
-      color: #2196f3;
-      font-size: 14px;
       min-width: 60px;
+      color: $color_blue--default;
+      font-size: 14px;
       font-family: inherit;
-      transition: color 0.25s ease-out;
       text-transform: uppercase;
+      transition: color 0.25s ease-out;
+      border-left: 1px $color-gray--light;
+      cursor: pointer;
       &:hover {
-        color: #1976d2;
+        color: $color_blue--hover;
       }
+    }
+  }
+
+  @media screen and(max-width: 400px) {
+    form {
+      flex-direction: column;
+      justify-content: center;
+    }
+    button {
+      height: 33px;
+      min-width: auto !important;
+      margin-top: 20px;
+      padding: 0 20px;
+      align-self: center;
+      color: $color_typography--white !important;
+      background-color: $color_blue--default;
+      border-radius: inherit;
     }
   }
 }

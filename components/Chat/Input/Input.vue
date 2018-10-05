@@ -53,7 +53,7 @@ export default {
       if (this.message && this.message.trim()) {
         const date = new Date()
         const minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
-        const hours = (date.getHours() < 10 ? '0' : '') + date.getHours();
+        const hours = (date.getHours() < 10 ? '0' : '') + date.getHours()
         const time = `${hours}:${minutes}`
 
         socket.emit('message', {
@@ -73,38 +73,37 @@ export default {
 .chat-message-container {
   padding: 20px 0;
   margin: 0 75px;
+  form {
+    display: flex;
+    overflow: hidden;
+    border-radius: $border-radius--primary;
+    box-shadow: $box-shadow--light;
+    .chat-message {
+      flex-grow: 1;
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+    button,
+    input {
+      background-color: $color_typography--white;
+    }
+    button {
+      padding: 0 20px;
+      color: #2196f3;
+      font-size: 16px;
+      font-family: inherit;
+      transition: color 0.25s ease-out;
+      cursor: pointer;
+      &:hover {
+        color: $color_blue--hover;
+      }
+    }
+  }
   @media screen and(max-width: 768px) {
     margin: 0 30px;
   }
   @media screen and(max-width: 400px) {
     margin: 0 15px;
-  }
-  form {
-    display: flex;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.12);
-    .chat-message {
-      flex-grow: 1;
-      border: 0;
-      outline: 0;
-      padding: 10px 20px;
-      font-size: 14px;
-    }
-    button {
-      background-color: white;
-      outline: none;
-      border: 0;
-      padding: 0 20px;
-      cursor: pointer;
-      color: #2196f3;
-      font-size: 16px;
-      transition: color 0.25s ease-out;
-      font-family: inherit;
-      &:hover {
-        color: #1976d2;
-      }
-    }
   }
 }
 </style>

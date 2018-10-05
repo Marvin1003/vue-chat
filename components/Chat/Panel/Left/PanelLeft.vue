@@ -48,47 +48,44 @@ export default {
 </script>
 <style lang="scss" scoped>
 .chat-panel-left {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   min-width: 250px;
-  margin-left: 75px;
+  margin-left: 70px;
+  .chat-name {
+    margin-top: 20px;
+    padding-bottom: 5px;
+    text-align: center;
+    color: $color_typography--white;
+    border-bottom: 1px solid $color_typography--white;
+  }
+  .chat-roomlist li {
+    color: $color_typography--white;
+    background-color: $color_blue--default;
+  }
+  ul {
+    overflow: scroll;
+    li {
+      display: flex;
+      align-items: center;
+      height: 57px;
+      max-width: 300px;
+      margin: 10px 5px;
+      padding-left: 30px;
+      border-radius: 100px;
+
+      background-color: $color_typography--white;
+      box-shadow: $box-shadow--light;
+      cursor: pointer;
+    }
+  }
+
   @media screen and(max-width: 768px) {
     margin-left: 30px;
   }
   @media screen and(max-width: 400px) {
     margin-left: 15px;
-  }
-
-  display: flex;
-  flex-direction: column;
-  .chat-name {
-    margin-top: 20px;
-    text-align: center;
-    color: white;
-    padding-bottom: 5px;
-    border-bottom: 1px solid white;
-  }
-
-  .chat-roomlist li {
-    background-color: #2196f3;
-    color: white;
-  }
-  ul {
-    padding: 0;
-    overflow: scroll;
-    list-style-type: none;
-    li {
-      cursor: pointer;
-      max-width: 300px;
-      background-color: white;
-
-      border-radius: 100px;
-      display: flex;
-      align-items: center;
-      padding-left: 30px;
-      height: 57px;
-      margin: 10px 10px 10px 0;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.12);
-    }
   }
 }
 </style>

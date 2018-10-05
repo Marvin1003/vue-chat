@@ -30,6 +30,14 @@ export default {
   margin: 0 75px;
   justify-content: space-between;
   padding-bottom: 20px;
+
+  h2 {
+    font-weight: normal;
+  }
+  .chat-rooms-text {
+    cursor: pointer;
+  }
+  
   @media screen and(max-width: 768px) {
     margin: 0 30px;
     padding-bottom: 0;
@@ -38,12 +46,6 @@ export default {
 
   @media screen and(max-width: 400px) {
     margin: 0 15px;
-  }
-  h2 {
-    font-weight: normal;
-  }
-  .chat-rooms-text {
-    cursor: pointer;
   }
 }
 </style>
