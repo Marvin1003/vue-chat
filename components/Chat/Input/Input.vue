@@ -53,7 +53,8 @@ export default {
       if (this.message && this.message.trim()) {
         const date = new Date()
         const minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes()
-        const time = `${date.getHours()}:${minutes}`
+        const hours = (date.getHours() < 10 ? '0' : '') + date.getHours();
+        const time = `${hours}:${minutes}`
 
         socket.emit('message', {
           name: this.name,
