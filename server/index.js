@@ -33,8 +33,18 @@ let userList = []
 
 io.on('connection', socket => {
   socket.on('switch room', ({ prevRoom, nextRoom, name }) => {
+    socket.broadcast.to(prevRoom).emit('roomChange', {
+      user: name,
+      userList,
+      type: 'LEFT THIS ROOM'
+    })
     socket.leave(prevRoom)
     socket.join(nextRoom)
+    socket.broadcast.to(nextRoom).emit('roomChange', {
+      user: name,
+      userList,
+      type: 'JOINED THIS ROOM'
+    })
   })
   // Validate user name
   socket.on('validate', name => {
@@ -47,7 +57,7 @@ io.on('connection', socket => {
     if (name && room) {
       socket.join(room)
 
-      userList.push({ name: name, id: socket.id })
+      userList.push({ name, id: socket.id })
       io.emit('roomChange', {
         name,
         userList,
