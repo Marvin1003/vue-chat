@@ -38,7 +38,7 @@ export default {
   align-items: center;
   height: 100%;
   width: 100%;
-  background-image: url('../assets/images/wallpaper.jpg');
+  background-image: url('https://source.unsplash.com/1500x1000');
   background-size: cover;
   background-position: center;
 }
