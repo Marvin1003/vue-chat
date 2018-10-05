@@ -66,7 +66,7 @@ export default {
 
     socket.on('roomChange', ({ user, type }) => {
       if (user !== this.name && user) {
-        if (!this.messages[this.room]) this.messages[this.room] = []
+        if (!this.messages[this.room]) this.$set(this.messages, this.room, [])
         this.messages[this.room].push({
           text: user,
           class: 'chat-joined_disconnected',
