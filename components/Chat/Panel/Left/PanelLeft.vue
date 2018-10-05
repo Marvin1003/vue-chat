@@ -1,13 +1,13 @@
 <template>
   <div :class="className">
     <div>
-      <ul>
+      <ul class="chat-roomlist">
         <li v-for="room in rooms.list" :key="room" @click="$emit('switchRoom', room)">
           {{ room }}
         </li>
       </ul>
     </div>
-    <ul>
+    <ul class="chat-userlist">
       <li v-for="user in userList" :key="user.id">
         {{user.name }}
       </li>
@@ -29,7 +29,7 @@ export default {
     rooms: {
       type: Object,
       required: true
-    },
+    }
   },
   data() {
     return {
@@ -40,7 +40,7 @@ export default {
   async mounted() {
     socket = await import('plugins/socketio').then(mod => mod.default)
 
-    socket.on('joined', ({ userList }) => {
+    socket.on('roomChange', ({ userList }) => {
       this.userList = userList
     })
   }
@@ -68,6 +68,10 @@ export default {
     border-bottom: 1px solid white;
   }
 
+  .chat-roomlist li {
+    background-color: #2196f3;
+    color: white;
+  }
   ul {
     padding: 0;
     overflow: scroll;
@@ -75,8 +79,8 @@ export default {
     li {
       cursor: pointer;
       max-width: 300px;
-      background-color: #2196f3;
-      color: white;
+      background-color: white;
+
       border-radius: 100px;
       display: flex;
       align-items: center;
