@@ -1,6 +1,6 @@
 <template>
   <div class="chat">
-    <panel-top className="chat-panel-top" :name="name" :room="rooms.current" @toggleRooms="toggleRooms" />
+    <panel-top className="chat-panel-top" :name="name" :room="rooms.current" :chatName="chatName" @toggleRooms="toggleRooms" />
     <panel-left className="chat-panel-left" @switchRoom="switchRoom" :name="name" :rooms="rooms" />
     <Output className="chat-output" :name="name" :room="rooms.current" />
     <Input className="chat-message-container" :name="name" :room="rooms.current" />
@@ -8,12 +8,18 @@
 </template>
 
 <script>
+import colors from 'assets/google/colors.json'
+
 import Output from './Output/Output.vue'
 import Input from './Input/Input.vue'
 import PanelLeft from './Panel/Left/PanelLeft.vue'
 import PanelTop from './Panel/Top/PanelTop.vue'
 
 var socket = null
+const roomColors = Object.keys(colors).map(key => colors[key][500])
+
+let rooms = ['General', 'Work', 'Developer', 'Fun', 'NSFW']
+rooms = rooms.map((roomName, i) => ({ name: roomName, color: roomColors[i] }))
 
 export default {
   components: {
@@ -31,9 +37,10 @@ export default {
   data() {
     return {
       rooms: {
-        list: ['General', 'Work', 'Developer', 'NSFW'],
+        list: rooms,
         current: 'General'
-      }
+      },
+      chatName: "Pixelpark Chat"
     }
   },
   methods: {
@@ -77,7 +84,7 @@ export default {
     'left output output output'
     'left input input input';
 
-  background-color: $color_background--primary-opacity;
+  background-color: $color_white;
   box-shadow: $box-shadow--primary;
   border-radius: $border-radius--primary;
   overflow: hidden;
@@ -100,7 +107,7 @@ export default {
     height: calc(100% - 20px);
     margin: 10px;
     grid-template-rows: 50px repeat(2, 1fr) auto;
-    background-color: $color_background--primary;
+    background-color: $color_white;
     .chat-panel-left {
       display: none;
       grid-area: left;

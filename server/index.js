@@ -3,6 +3,7 @@ const { Nuxt, Builder } = require('nuxt')
 const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
+const colors = require('../assets/google/colors.json')
 
 const PORT = process.env.PORT || 3000
 
@@ -29,26 +30,43 @@ server.listen(PORT, '0.0.0.0')
 console.log('Server listening on localhost:' + PORT)
 
 // SOCKET IO
-let userList = []
+let userList = {}
+let count = -1
 
 io.on('connection', socket => {
   socket.on('switch room', ({ prevRoom, nextRoom, name }) => {
-    socket.broadcast.to(prevRoom).emit('roomChange', {
+    const user = removeUser(socket.id)
+
+    if (!userList[nextRoom]) userList[nextRoom] = []
+    userList[nextRoom].push(user)
+
+    io.in(prevRoom).emit('roomChange', {
       user: name,
-      userList,
+      userList: userList[prevRoom],
       type: 'LEFT THIS ROOM'
     })
+
     socket.leave(prevRoom)
     socket.join(nextRoom)
-    socket.broadcast.to(nextRoom).emit('roomChange', {
+
+    io.in(nextRoom).emit('roomChange', {
       user: name,
-      userList,
+      userList: userList[nextRoom],
       type: 'JOINED THIS ROOM'
     })
   })
   // Validate user name
   socket.on('validate', name => {
-    const exists = userList.some(user => user.name === name)
+    const keys = Object.keys(userList)
+    let exists = null
+
+    for (const key of keys) {
+      if (Array.isArray(userList[key])) {
+        exists = userList[key].some(user => user.name === name)
+        if (exists) break
+      }
+    }
+
     exists ? io.emit('validate', false) : io.emit('validate', true)
   })
 
@@ -57,10 +75,15 @@ io.on('connection', socket => {
     if (name && room) {
       socket.join(room)
 
-      userList.push({ name, id: socket.id })
+      count++
+      const color = getColor()
+
+      if (!userList[room]) userList[room] = []
+      userList[room].push({ name, id: socket.id, color })
+
       io.emit('roomChange', {
         name,
-        userList,
+        userList: userList[room],
         type: 'JOINED'
       })
     }
@@ -73,21 +96,39 @@ io.on('connection', socket => {
   socket.on('message', msg => io.to(msg.room).emit('message', msg))
 
   socket.on('disconnect', () => {
-    let removedUser = null
-    // Remove disconnected user from userlist
-    userList = userList.filter(user => {
-      if (user.id === socket.id) {
-        removedUser = user.name
-        return false
-      }
-      return true
-    })
+    const removedUser = removeUser(socket.id)
 
-    removedUser &&
+    if (removedUser.name) {
       io.emit('roomChange', {
-        user: removedUser,
+        user: removedUser.name,
         userList,
         type: 'DISCONNECTED'
       })
+    }
   })
 })
+
+function removeUser(id) {
+  const keys = Object.keys(userList)
+  let removedUser = {}
+
+  // Remove disconnected user from userlist
+  for (const key of keys) {
+    if (Array.isArray(userList[key])) {
+      userList[key] = userList[key].filter(user => {
+        if (user.id === id) {
+          removedUser = user
+          return false
+        }
+        return true
+      })
+    }
+  }
+  return removedUser
+}
+
+function getColor() {
+  const color = Object.keys(colors)
+  if (!colors[color[count]]) count = -1
+  return colors[color[count]][500]
+}

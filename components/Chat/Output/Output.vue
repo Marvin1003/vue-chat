@@ -135,7 +135,7 @@ export default {
         padding: 15px;
         border-radius: 4px;
         overflow: hidden;
-        background-color: $color_typography--white;
+        background-color: $color_white;
         box-shadow: $box-shadow--light;
       }
       .chat-joined_disconnected {
@@ -149,7 +149,7 @@ export default {
 
       &.chat-message-output-me {
         align-self: flex-end;
-        color: $color_typography--white;
+        color: $color_white;
         .chat-default {
           background-color: $color_blue--default;
           time {

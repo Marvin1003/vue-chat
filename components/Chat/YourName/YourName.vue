@@ -45,9 +45,9 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   padding: 30px 50px;
-  background-color: $color_background--primary-opacity;
+  background-color: $color_white;
   border-radius: $border-radius--primary;
   box-shadow: $box-shadow--primary;
   overflow: hidden;
@@ -98,7 +98,7 @@ export default {
       margin-top: 20px;
       padding: 0 20px;
       align-self: center;
-      color: $color_typography--white !important;
+      color: $color_white !important;
       background-color: $color_blue--default;
       border-radius: inherit;
     }

@@ -39,10 +39,12 @@ export default {
   methods: {
     isTyping() {
       clearTimeout(this.timeout)
+
       if (this.isTypingEmit) {
         this.isTypingEmit = false
         socket.emit('isTyping', { name: this.name, isTyping: true })
       }
+
       this.timeout = setTimeout(() => {
         this.isTypingEmit = true
         socket.emit('isTyping', { name: this.name, isTyping: false })
@@ -59,8 +61,8 @@ export default {
         socket.emit('message', {
           name: this.name,
           msg: this.message,
-          time,
-          room: this.room
+          room: this.room,
+          time
         })
         this.message = null
       }
@@ -85,7 +87,7 @@ export default {
     }
     button,
     input {
-      background-color: $color_typography--white;
+      background-color: $color_white;
     }
     button {
       padding: 0 20px;

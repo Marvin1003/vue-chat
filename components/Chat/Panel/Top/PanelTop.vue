@@ -1,7 +1,6 @@
 <template>
   <div :class="className">
-    <h2 @click="$emit('toggleRooms')" class="chat-rooms-text">Rooms</h2>
-    <h2>{{ room }}</h2>
+    <h2 @click="$emit('toggleRooms')" class="chat-rooms-text">{{ chatName }}</h2>
   </div>
 </template>
 <script>
@@ -18,6 +17,10 @@ export default {
     room: {
       type: String,
       required: true
+    },
+    chatName: {
+      type: String,
+      default: 'Chat'
     }
   }
 }
@@ -37,7 +40,7 @@ export default {
   .chat-rooms-text {
     cursor: pointer;
   }
-  
+
   @media screen and(max-width: 768px) {
     margin: 0 30px;
     padding-bottom: 0;
