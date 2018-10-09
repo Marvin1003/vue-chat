@@ -74,7 +74,7 @@ export default {
 <style lang="scss" scoped>
 .chat-message-container {
   padding: 20px 0;
-  margin: 0 75px;
+  margin: 0 50px;
   form {
     display: flex;
     overflow: hidden;

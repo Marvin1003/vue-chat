@@ -1,9 +1,19 @@
 <template>
   <div :class="className">
-    <h2 @click="$emit('toggleRooms')" class="chat-rooms-text">{{ chatName }}</h2>
+    <div class="chat-is-typing">
+      <div>
+        <ul v-show="isTyping.length > 0">
+          <li v-for="(user, index) in isTyping" :key="index">{{ user }}</li>
+          <span> is typing...</span>
+        </ul>
+      </div>
+      <div @click="$emit('toggleRooms')" class="chat-button">M</div>
+    </div>
   </div>
 </template>
 <script>
+var socket = null
+
 export default {
   props: {
     className: {
@@ -17,38 +27,77 @@ export default {
     room: {
       type: String,
       required: true
-    },
-    chatName: {
-      type: String,
-      default: 'Chat'
     }
+  },
+  data() {
+    return {
+      isTyping: [],
+      isTouching: false,
+      threshold: 150
+    }
+  },
+  async mounted() {
+    socket = await import('plugins/socketio').then(mod => mod.default)
+
+    socket.on('isTyping', user => {
+      if (user.name !== this.name) {
+        if (user.isTyping && !this.isTyping.includes(user.name))
+          this.isTyping.push(user.name)
+        else if (!user.isTyping)
+          this.isTyping = this.isTyping.filter(name => name !== user.name)
+      }
+    })
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .chat-panel-top {
+  margin: 0 50px;
   display: flex;
-  align-items: flex-end;
-  margin: 0 75px;
-  justify-content: space-between;
-  padding-bottom: 20px;
-
-  h2 {
-    font-weight: normal;
-  }
-  .chat-rooms-text {
-    cursor: pointer;
-  }
-
-  @media screen and(max-width: 768px) {
-    margin: 0 30px;
-    padding-bottom: 0;
+  align-items: center;
+  .chat-is-typing {
+    flex-grow: 1;
+    background-color: $color_gray--light;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-  }
+    min-height: 40px;
+    color: $color_gray--dark;
+    font-size: 12px;
+    border-radius: $border-radius--primary;
+    .chat-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      width: 70px;
+      min-height: 30px;
+      margin-right: 5px;
+      background-color: $color_menu;
+      border-radius: $border-radius--primary;
+      @media screen and(min-width: 992px) {
+        display: none;
+      }
+    }
+    ul {
+      max-width: 50%;
+      overflow: scroll;
+      span {
+        white-space: pre;
+      }
 
-  @media screen and(max-width: 400px) {
-    margin: 0 15px;
+      li:not(:last-of-type)::after {
+        content: ', ';
+        white-space: pre;
+      }
+    }
+  }
+  @media screen and(max-width: 768px) {
+    margin: 0 25px;
+  }
+  @media screen and(max-width: 399px) {
+    margin: 0 10px;
   }
 }
 </style>

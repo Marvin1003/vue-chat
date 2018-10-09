@@ -129,6 +129,6 @@ function removeUser(id) {
 
 function getColor() {
   const color = Object.keys(colors)
-  if (!colors[color[count]]) count = -1
+  if (!colors[color[count]]) count = 0
   return colors[color[count]][500]
 }

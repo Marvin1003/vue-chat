@@ -1,11 +1,5 @@
 <template>
   <div :class="className">
-    <div class="chat-is-typing">
-      <ul v-show="isTyping.length > 0">
-        <li v-for="(user, index) in isTyping" :key="index">{{ user }}</li>
-        <span> is typing...</span>
-      </ul>
-    </div>
     <ul v-show="messages[this.room]" ref="list" @touchstart="isTouching = true" @touchend="isTouching = false">
       <li v-for="(message, index) in messages[this.room]" class="chat-message-output" :key="index" :class="message.name === name ? 'chat-message-output-me' : ''">
         <div v-if="!message.class" class="chat-default">
@@ -50,15 +44,6 @@ export default {
   async mounted() {
     socket = await import('plugins/socketio').then(mod => mod.default)
 
-    socket.on('isTyping', user => {
-      if (user.name !== this.name) {
-        if (user.isTyping && !this.isTyping.includes(user.name))
-          this.isTyping.push(user.name)
-        else if (!user.isTyping)
-          this.isTyping = this.isTyping.filter(name => name !== user.name)
-      }
-    })
-
     socket.on('message', ({ msg, name, time }) => {
       if (!this.messages[this.room]) this.$set(this.messages, this.room, [])
       this.messages[this.room].push({ text: msg, name, time })
@@ -99,11 +84,12 @@ export default {
   flex-direction: column;
   overflow-y: scroll;
   overflow-x: hidden;
-  margin: 0 70px;
+  margin: 0 45px 0 45px;
   ul {
     display: flex;
   }
   .chat-is-typing {
+    background-color: $color_gray--light;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -111,6 +97,18 @@ export default {
     margin: 0 5px;
     color: $color_gray--dark;
     font-size: 12px;
+    border-radius: $border-radius--primary;
+    .chat-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      width: 70px;
+      min-height: 20px;
+      margin-right: 5px;
+      background-color: $color_blue--dark;
+      border-radius: $border-radius--primary;
+    }
     ul {
       max-width: 50%;
       overflow: scroll;
@@ -181,11 +179,11 @@ export default {
       }
     }
   }
-  @media screen and(max-width: 768px) {
+  @media screen and(max-width: 767px) {
     margin: 0 25px;
   }
 
-  @media screen and(max-width: 400px) {
+  @media screen and(max-width: 399px) {
     margin: 0 10px;
   }
 }

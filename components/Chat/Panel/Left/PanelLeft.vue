@@ -1,12 +1,13 @@
 <template>
   <div :class="className">
+    <h2>Pixelpark Chat</h2>
     <div class="chat-roomlist-container">
       <ul class="chat-roomlist" ref="roomList">
-        <li v-for="room in rooms.list" :key="room.name" @click="$emit('switchRoom', room.name)" :data-room="room.name">
-          <span :style="{ backgroundColor: room.color }">{{ room.name.charAt(0) }}</span>
+        <li v-for="room in rooms.list" :key="room.name" @click="$emit('switchRoom', room.name)" :data-room="room.name"  :style="{ backgroundColor: room.color }">
+          {{ room.name.charAt(0) }}
         </li>
       </ul>
-      <div class="chat-roomlist-current">{{ rooms.current }}</div>
+      <div ref="currentRoom" class="chat-roomlist-current">{{ rooms.current }}</div>
     </div>
     <input class="chat-search" type="Search" placeholder="Search" v-model="search" />
     <ul class="chat-userlist">
@@ -57,6 +58,10 @@ export default {
       const prevI = this.roomList.findIndex(elem => elem.dataset.room === prev)
       const nextI = this.roomList.findIndex(elem => elem.dataset.room === next)
 
+      const color = this.roomList[nextI].style.backgroundColor
+
+      this.$refs.currentRoom.style.backgroundColor = color
+
       prevI !== -1 &&
         this.roomList[prevI].classList.remove('chat-roomlist--active')
       nextI !== -1 &&
@@ -77,49 +82,47 @@ export default {
 
 <style lang="scss">
 .chat-roomlist--active {
-  background-color: #757575;
-  span {
-    transform: scale(1.2);
-    box-shadow: $box-shadow--light;
-  }
+  transform: scale(1.3);
+  box-shadow: $box-shadow--light;
 }
 </style>
 <style lang="scss" scoped>
 .chat-panel-left {
+  background-color: $color_gray--light;
   display: flex;
   flex-direction: column;
   height: 100%;
   min-width: 250px;
-  margin-left: 70px;
+  padding: 0 50px;
+  h2 {
+    margin: 50px 0;
+    font-weight: normal;
+  }
   .chat-search {
+    width: 100%;
     margin: 15px 0 5px 0;
     padding: 15px 20px;
-    background-color: $color_gray--light;
   }
   .chat-roomlist-container {
-    background-color: $color_gray--light;
-    padding: 10px;
     .chat-roomlist-current {
       font-size: 18px;
       background-color: #757575;
       text-align: center;
       padding: 10px 0;
       color: $color_white;
-      border-radius: 10px;
+      border-radius: $border-radius--primary;
     }
     .chat-roomlist {
       display: flex;
       margin-bottom: 5px;
       li {
-        border-radius: 10px;
-        padding: 10px;
-      }
-      span {
+        margin: 10px;
+
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 30px;
-        height: 30px;
+        min-width: 30px;
+        min-height: 30px;
         color: $color_white;
         background-color: $color_blue--default;
         border-radius: 100%;
@@ -142,10 +145,11 @@ export default {
       border-top-left-radius: 100px;
       border-bottom-left-radius: 100px;
       &:hover {
-        background-color: $color_gray--light;
+        background-color: $color_white;
       }
       cursor: pointer;
       .chat-userlist-avatar {
+        text-transform: uppercase;
         height: 35px;
         width: 35px;
         display: flex;

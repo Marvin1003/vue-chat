@@ -1,6 +1,6 @@
 <template>
   <div class="chat">
-    <panel-top className="chat-panel-top" :name="name" :room="rooms.current" :chatName="chatName" @toggleRooms="toggleRooms" />
+    <panel-top className="chat-panel-top" :name="name" :room="rooms.current" @toggleRooms="toggleRooms" />
     <panel-left className="chat-panel-left" @switchRoom="switchRoom" :name="name" :rooms="rooms" />
     <Output className="chat-output" :name="name" :room="rooms.current" />
     <Input className="chat-message-container" :name="name" :room="rooms.current" />
@@ -39,8 +39,7 @@ export default {
       rooms: {
         list: rooms,
         current: 'General'
-      },
-      chatName: "Pixelpark Chat"
+      }
     }
   },
   methods: {
@@ -72,14 +71,14 @@ export default {
 
 <style lang="scss" scoped>
 .chat {
-  width: 80%;
-  height: 70%;
+  width: 90%;
+  height: 80%;
   position: relative;
   display: grid;
-  grid-template-rows: 120px repeat(2, 1fr) auto;
+  grid-template-rows: 60px repeat(2, 1fr) auto;
   grid-template-columns: 1.4fr repeat(3, 1fr);
   grid-template-areas:
-    'top top top top'
+    'left top top top'
     'left output output output'
     'left output output output'
     'left input input input';
@@ -89,7 +88,7 @@ export default {
   border-radius: $border-radius--primary;
   overflow: hidden;
 
-  @media screen and(max-width: 992px) {
+  @media screen and(max-width: 991px) {
     grid-template-areas:
       'top top top top'
       'output output output output'
@@ -102,11 +101,10 @@ export default {
     }
   }
 
-  @media screen and(max-width: 400px) {
+  @media screen and(max-width: 399px) {
     width: 100%;
     height: calc(100% - 20px);
     margin: 10px;
-    grid-template-rows: 50px repeat(2, 1fr) auto;
     background-color: $color_white;
     .chat-panel-left {
       display: none;
@@ -134,10 +132,18 @@ export default {
 <style lang="scss">
 .chat-rooms-toggle {
   .chat-panel-left {
+    height: calc(100% - 10px);
     grid-column: 1 / 5 !important;
     grid-row: 2 / 5 !important;
     display: block !important;
-    margin: 0 15px !important;
+    margin: 0 10px !important;
+    border-radius: $border-radius--primary;
+    .chat-roomlist-container {
+      margin-top: 25px;
+    }
+    h2 {
+      display: none;
+    }
     li {
       margin: 10px auto !important;
     }
