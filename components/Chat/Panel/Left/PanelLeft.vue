@@ -115,9 +115,9 @@ export default {
     .chat-roomlist {
       display: flex;
       margin-bottom: 5px;
+      overflow-y: hidden;
       li {
         margin: 10px;
-
         display: flex;
         justify-content: center;
         align-items: center;
