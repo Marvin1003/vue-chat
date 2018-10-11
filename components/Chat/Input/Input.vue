@@ -32,7 +32,7 @@ export default {
     return {
       message: null,
       timeout: null,
-      isTypingDuration: 750,
+      isTypingDuration: 500,
       isTypingEmit: true
     }
   },
