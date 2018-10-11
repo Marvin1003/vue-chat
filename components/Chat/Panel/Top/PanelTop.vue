@@ -1,10 +1,10 @@
 <template>
   <div :class="className">
     <div class="chat-is-typing">
-      <div>
+      <div class="chat-is-typing-user">
         <ul v-show="isTyping.length > 0">
           <li v-for="(user, index) in isTyping" :key="index">{{ user }}</li>
-          <span> is typing...</span>
+          <span>{{ multipleTyping ? " are" : " is" }} typing...</span>
         </ul>
       </div>
       <div @click="$emit('toggleRooms')" class="chat-button">M</div>
@@ -33,7 +33,14 @@ export default {
     return {
       isTyping: [],
       isTouching: false,
-      threshold: 150
+      threshold: 150,
+      multipleTyping: false
+    }
+  },
+  watch: {
+    isTyping(next, prev) {
+      if (next.length > 1) this.multipleTyping = true
+      else this.multipleTyping = false
     }
   },
   async mounted() {
@@ -80,16 +87,20 @@ export default {
         display: none;
       }
     }
-    ul {
+    .chat-is-typing-user {
       max-width: 50%;
-      overflow: scroll;
-      span {
-        white-space: pre;
-      }
+      ul {
+        padding-left: 10px;
+        display: flex;
+        overflow: scroll;
+        span {
+          white-space: pre;
+        }
 
-      li:not(:last-of-type)::after {
-        content: ', ';
-        white-space: pre;
+        li:not(:last-of-type)::after {
+          content: ', ';
+          white-space: pre;
+        }
       }
     }
   }
