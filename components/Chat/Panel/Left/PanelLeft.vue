@@ -52,7 +52,9 @@ export default {
   },
   methods: {
     filterSearch() {
-      return this.userList.filter(({ name }) => name.includes(this.search))
+      return this.userList.filter(({ name }) =>
+        name.toLowerCase().includes(this.search.toLowerCase())
+      )
     },
     updateRoom(next, prev) {
       const prevI = this.roomList.findIndex(elem => elem.dataset.room === prev)
