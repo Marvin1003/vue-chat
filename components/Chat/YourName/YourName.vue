@@ -31,8 +31,8 @@ export default {
   methods: {
     validate(e) {
       e.preventDefault()
-      const tmp = this.name.trim()
-      if (this.name && tmp.length >= 2) {
+      const name = this.name.trim()
+      if (this.name && name.length >= 2) {
         socket.emit('validate', this.name)
       }
     }
