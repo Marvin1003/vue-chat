@@ -90,7 +90,20 @@ io.on('connection', socket => {
   })
 
   // User is typing
-  socket.on('isTyping', user => io.emit('isTyping', user))
+  socket.on('isTyping', user => {
+    let room = null;
+    for(const key of Object.keys(userList)) {
+      if(room) break;
+      for(const { name } of userList[key]) {
+        if(name === user.name) {
+          room = key;
+          break;
+        }
+      }
+    }
+    
+    return io.to(room).emit('isTyping', user)
+  })
 
   // Messages
   socket.on('message', msg => io.to(msg.room).emit('message', msg))
